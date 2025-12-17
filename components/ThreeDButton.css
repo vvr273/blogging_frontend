@@ -1,0 +1,110 @@
+/* src/components/ThreeDButton.css */
+
+.three-d-container {
+  width: 100%; /* Matches your form input width */
+  height: 50px;
+  position: relative;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin-top: 10px;
+  cursor: pointer;
+  
+  /* Prevent clicking if disabled */
+  
+}
+
+.three-d-container:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* The Top Layer (Text) */
+.three-d-top {
+  width: 75%;
+  height: 100%;
+  background: rgb(237, 118, 229);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(36, 38, 34);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7mm;
+  outline: 2px solid rgb(36, 38, 34);
+  transition: 0.2s;
+  position: relative;
+  overflow: hidden;
+  z-index: 2; /* Ensure it stays on top */
+}
+
+/* The Bottom Layer (Shadow/Depth) */
+.three-d-bottom {
+  position: absolute;
+  width: 75%;
+  height: 100%;
+  background: rgb(215, 120, 239);
+  top: 10px;
+  left: 0;
+  border-radius: 7mm;
+  outline: 2px solid rgb(36, 38, 34);
+  z-index: 1;
+}
+
+/* Vertical lines on the bottom layer */
+.three-d-bottom::before {
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 9px;
+  background: rgb(36, 38, 34);
+  bottom: 0;
+  left: 15%;
+}
+
+.three-d-bottom::after {
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 9px;
+  background: rgb(36, 38, 34);
+  bottom: 0;
+  left: 85%;
+}
+
+/* The Grey Layer (Middle/depth connector) */
+.three-d-container::before {
+  position: absolute;
+  content: "";
+  width: calc(75% + 2px);
+  height: 100%;
+  background: rgb(140, 140, 140);
+  top: 14px;
+  left: -1px;
+  border-radius: 7mm;
+  outline: 2px solid rgb(36, 38, 34);
+  z-index: 0;
+}
+
+/* The Shine Effect on the Top Layer */
+.three-d-top::before {
+  position: absolute;
+  content: "";
+  width: 15px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  transform: skewX(30deg);
+  left: -20px;
+  transition: 0.25s;
+}
+
+/* Hover/Active Animations */
+.three-d-container:hover .three-d-top::before {
+    left: calc(100% + 20px);
+}
+
+.three-d-container:active .three-d-top {
+  transform: translateY(10px);
+}

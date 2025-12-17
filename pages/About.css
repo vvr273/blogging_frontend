@@ -1,0 +1,207 @@
+/* About.css */
+
+/* --- Base Layout & Typography --- */
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    font-family: 'Poppins', sans-serif; /* Using Poppins for a clean, modern feel */
+}
+
+span.nav-link:hover{
+    cursor: pointer;
+}
+span.nav-link{
+    background-color: cadetblue;
+    width: 100%;
+    height: 100%;
+     font-size: clamp(1rem, 2vw, 2rem); /* Responsive font size */
+    font-weight: 800;
+    display: inline;
+    opacity: 0.9;
+    /* Animation for the hero text is a great touch */
+    animation: fadeInSlide 0.8s ease-out forwards;
+    border-radius: 5px 5px 5px 5px;
+
+}
+
+/* --- Hero Section --- */
+.about-hero {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 8vw, 4.5rem); /* Responsive font size */
+    font-weight: 800;
+    line-height: 1.1;
+    color: #1a202c; /* Dark text for contrast */
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.hero-title span {
+    display: block;
+    opacity: 0.9;
+    /* Animation for the hero text is a great touch */
+    animation: fadeInSlide 0.8s ease-out forwards;
+}
+
+.line-1 { animation-delay: 0.1s; }
+.line-2 { animation-delay: 0.2s; }
+/* Highlight the key phrase */
+.line-3 { 
+    color: #4F46E5; /* Your accent color (Indigo-600) */
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    animation-delay: 0.3s;
+}
+
+.line-3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(79, 70, 229, 0.2); /* Subtle underline */
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    color: #4a5568;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Themes Section (Cards) --- */
+.about-themes {
+    margin-bottom: 80px;
+}
+
+.themes-heading {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 40px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.theme-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05); /* Soft, modern shadow */
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    border: 1px solid #e2e8f0;
+    cursor: default;
+}
+
+.theme-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-image-wrapper {
+    height: 200px; /* Fixed height for consistent look */
+    overflow: hidden;
+}
+
+.theme-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images fill the space without distortion */
+    transition: transform 0.5s ease;
+}
+
+.theme-card:hover img {
+    transform: scale(1.05);
+}
+
+.theme-card-content {
+    padding: 25px;
+}
+
+.theme-card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.theme-card p {
+    color: #718096;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+
+/* --- Mission Section --- */
+.about-mission {
+    padding: 50px;
+    background: #F0F4FF; /* Very light blue background for emphasis */
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid #E0E7FF;
+}
+
+.about-mission h2 {
+    font-size: 2rem;
+    color: #4F46E5;
+    margin-bottom: 20px;
+    font-weight: 800;
+}
+
+.about-mission p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    max-width: 800px;
+    margin: 0 auto 15px;
+    line-height: 1.6;
+}
+
+.cta-message {
+    font-weight: 600;
+    color: #2d3748;
+    margin-top: 30px;
+}
+
+
+/* --- Intersection Observer Reveal Styles --- */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Keyframe Animations --- */
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

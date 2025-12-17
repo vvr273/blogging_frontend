@@ -1,0 +1,454 @@
+our link navigate to signup or login page
+after login
+    we enter dashboard
+        we see side bar 
+            in that 
+            new post
+            my posts
+                title
+                description
+                setting like select oublic or private
+            stats
+            some setting feature
+                
+                keywords or search description
+
+
+ok our projects
+contains
+login 
+new post
+author:view posts that post stats
+author:all posts in mongodb which is more trending like more views and likes
+
+while seeing others posts
+he is reader
+he reads 
+    he like (toggle heart symbol)
+    he comments/delete comments
+    he read  others comments
+
+post contains 
+    title
+    description
+    search description
+    matter
+    commentable/non commentable(decided by author)
+    likes,comments,shares
+
+
+    more than a blog i can work as information sharing 
+    experience sharing 
+    doubts clearing through comments
+
+
+import { BaseKit } from 'reactjs-tiptap-editor'; 
+import { Blockquote } from 'reactjs-tiptap-editor/blockquote'; 
+import { Bold } from 'reactjs-tiptap-editor/bold'; 
+import { BulletList } from 'reactjs-tiptap-editor/bulletlist';
+import { Clear } from 'reactjs-tiptap-editor/clear'; 
+import { Code } from 'reactjs-tiptap-editor/code'; 
+import { CodeBlock } from 'reactjs-tiptap-editor/codeblock'; 
+import { Color } from 'reactjs-tiptap-editor/color'; 
+import { COLORS_LIST } from 'reactjs-tiptap-editor'import { DEFAULT_COLOR } from 'reactjs-tiptap-editor'
+import { Document } from 'reactjs-tiptap-editor/document'; import { FontFamily } from 'reactjs-tiptap-editor/fontfamily'; 
+import { FontSize } from 'reactjs-tiptap-editor/fontsize'; 
+import { FormatPainter } from 'reactjs-tiptap-editor/formatpainter';
+import { Heading } from 'reactjs-tiptap-editor/heading'; 
+import { Highlight } from 'reactjs-tiptap-editor/highlight'; 
+import { History } from 'reactjs-tiptap-editor/history'; 
+import { HorizontalRule } from 'reactjs-tiptap-editor/horizontalrule';
+import { Iframe } from 'reactjs-tiptap-editor/iframe'; 
+import { Image } from 'reactjs-tiptap-editor/image'; 
+import { Image } from 'reactjs-tiptap-editor/image'; 
+import 'react-image-crop/dist/ReactCrop.css'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+  Image.configure({
+    upload: (file: File) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(URL.createObjectURL(file))
+        }, 500)
+      })
+    },
+  }),
+];
+Image Gif
+ImageGif is a node extension that allows you to add an ImageGif to your editor.
+More: ImageGif
+Props
+
+interface IImageOptions extends GeneralOptions<IImageOptions> {
+  /** Function for uploading files */
+  upload?: (file: File) => Promise<string>
+
+  HTMLAttributes?: any
+
+  multiple?: boolean
+  acceptMimes?: string[]
+  maxSize?: number
+
+  /** The source URL of the image */
+  resourceImage: 'upload' | 'link' | 'both'
+  defaultInline?: boolean,
+
+  enableAlt?: boolean,
+
+  onError?: (error: {
+    type: 'size' | 'type' | 'upload';
+    message: string;
+    file?: File;
+  }) => void;
+}
+Property	Type	Description	Required	Default
+upload	(file: File) => Promise<string>	Custom image upload function that receives a File and returns a Promise with the image URL, suitable for uploading to cloud or local servers.	No	None
+HTMLAttributes	any	HTML attributes passed to the <img> tag, such as className, style, alt, etc.	No	None
+multiple	boolean	Whether to allow selecting and uploading multiple images simultaneously.	No	true
+acceptMimes	string[]	List of allowed image MIME types or file extension restrictions, such as ['image/jpeg', 'image/png'], ['image/*'], or ['.png', '.jpg'], etc. Supports MIME type wildcards and precise file extension restrictions.	No	Common image types ['image/jpeg', 'image/gif', 'image/png', 'image/jpg']
+maxSize	number	Maximum size limit for a single image (in bytes), triggers onError when exceeded.	No	5MB
+resourceImage	'upload' | 'link' | 'both'	Image source method: - 'upload': Upload only - 'link': Link only - 'both': Both supported	Yes	both
+defaultInline	boolean	Whether to insert images as inline elements by default.	No	false
+enableAlt	boolean	Whether to enable alt text editing for images.	No	true
+onError	(error: { type: 'size' | 'type' | 'upload'; message: string; file?: File }) => void	Callback function for upload or validation failures. Contains error type (size, type, upload), error message, and corresponding file.	No	None
+resourceImage Type Description
+'upload': Users can only select local files for upload
+'link': Users can only input image URLs
+'both': Supports both upload and URL methods
+acceptMimes Usage Instructions
+Supports three format types:
+
+MIME types: such as ['image/jpeg', 'image/png']
+Wildcard types: such as ['image/*'], matches all image MIME types
+Extension types: such as:
+
+[
+  '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.svgz', '.xbm',
+  '.tiff', '.ico', '.jfif', '.heic', '.heif', '.avif', '.bmp',
+  '.apng', '.pjpeg'
+]
+onError Example
+Customize error handling logic to unify system prompts.
+We recommend using the message field, which has built-in dynamic prompts and i18n internationalization support.
+
+onError: ({ type, message, file }) => {
+  switch (type) {
+    case 'size':
+      console.warn(`File size exceeds limit: ${file?.name}`);
+      break;
+    case 'type':
+      console.warn(`Unsupported file type: ${file?.type}`);
+      break;
+    case 'upload':
+      console.error(`Upload failed: ${message}`);
+      break;
+  }
+}
+Source
+import { Indent } from 'reactjs-tiptap-editor/indent'; 
+import { Italic } from 'reactjs-tiptap-editor/italic'; import { LineHeight } from 'reactjs-tiptap-editor/lineheight'; 
+lineHeights
+Type: string[]
+Default: ['100%', '115%', '150%', '200%', '250%', '300%']
+
+
+import { DEFAULT_LINE_HEIGHT_LIST, LineHeight } from 'reactjs-tiptap-editor/lineheight'
+
+FontSize.configure({
+  LineHeight: [
+    // Use default line height list
+    ...DEFAULT_LINE_HEIGHT_LIST,
+    '1',
+    '1.5',
+    '2',
+    '2.5'
+  ]
+  import { Link } from 'reactjs-tiptap-editor/link'
+  import { ListItem } from 'reactjs-tiptap-editor/listitem'; import { MoreMark } from 'reactjs-tiptap-editor/moremark'; 
+import { ColumnActionButton } from 'reactjs-tiptap-editor/multicolumn'; 
+import { OrderedList } from 'reactjs-tiptap-editor/orderedlist'; 
+import { Selection } from 'reactjs-tiptap-editor/selection'; 
+import { SlashCommand } from 'reactjs-tiptap-editor/slashcommand'; 
+import { Strike } from 'reactjs-tiptap-editor/strike'; 
+import { SubAndSuperScript } from 'reactjs-tiptap-editor/subandsuperscript'; 
+import { Table } from 'reactjs-tiptap-editor/table'; 
+import { TaskList } from 'reactjs-tiptap-editor/tasklist'; 
+import { TextAlign } from 'reactjs-tiptap-editor/textalign'; 
+ype: string[][]
+Default: [['mod', 'shift', 'L'], ['mod', 'shift', 'E'], ['mod', 'shift', 'R'], ['mod', 'shift', 'J']]
+import { TextBubble } from 'reactjs-tiptap-editor/textbubble';import { TrailingNode } from 'reactjs-tiptap-editor/trailingnode'; 
+import { Video } from 'reactjs-tiptap-editor/video'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+  Video.configure({
+    upload: (files: File) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(URL.createObjectURL(files))
+        }, 500)
+      })
+    },
+  }), 
+];
+Props
+
+interface VideoOptions extends GeneralOptions<VideoOptions> {
+  /**
+   * Indicates whether fullscreen play is allowed
+   *
+   * @default true
+   */
+  allowFullscreen: boolean
+  /**
+   * Indicates whether to display the frameborder
+   *
+   * @default false
+   */
+  frameborder: boolean
+  /**
+   * Width of the video, can be a number or string
+   *
+   * @default VIDEO_SIZE['size-medium']
+   */
+  width: number | string
+  /** HTML attributes object for passing additional attributes */
+  HTMLAttributes: {
+    [key: string]: any
+  }
+  /** Function for uploading files */
+  upload?: (file: File) => Promise<string>
+
+  /** The source URL of the video */
+  resourceVideo: 'upload' | 'link' | 'both'
+  import { SearchAndReplace } from 'reactjs-tiptap-editor/searchandreplace'; 
+searchTerm	string	Search Term	''
+replaceTerm	string	Replace Term	''
+searchResultClass	string	Search Result Class	'search-result'
+searchResultCurrentClass	string	Search Result Current Class	'search-result-current'
+caseSensitive	boolean	Case Sensitive	false
+disableRegex	boolean	Disable Regex	false
+onChange	() => void	On Change	undefined
+import { Emoji } from 'reactjs-tiptap-editor/emoji'; 
+import { Katex } from 'reactjs-tiptap-editor/katex'; 
+
+import 'katex/dist/katex.min.css'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+   Katex, 
+];
+Configuration bubble menu
+
+import { BubbleMenuKatex } from 'reactjs-tiptap-editor/bubble-extra'; 
+
+const App = () => {
+
+  return  <RichTextEditor
+    bubbleMenu={{
+      render({ extensionsNames, editor, disabled }, bubbleDefaultDom) {
+        return <>
+          {bubbleDefaultDom}
+
+          {extensionsNames.includes('katex')  ? <BubbleMenuKatex disabled={disabled}
+            editor={editor}
+            key="katex"
+          /> : null}
+        </>
+      },
+    }}
+  />
+}
+import { ExportPdf } from 'reactjs-tiptap-editor/exportpdf'; 
+type PaperSize =
+  | 'Legal'
+  | 'Letter'
+  | 'Tabloid'
+  | 'A0'
+  | 'A1'
+  | 'A2'
+  | 'A3'
+  | 'A4'
+  | 'A5';
+margins
+Type:
+
+
+{
+  top: PageMargin;
+  right: PageMargin;
+  bottom: PageMargin;
+  left: PageMargin;
+}
+Default:
+
+
+{
+  top: '0.4in',
+  right: '0.4in',
+  bottom: '0.4in',
+  left: '0.4in'
+}
+Controls the page margins on all four sides. Values can be provided in inches (in), centimeters (cm), millimeters (mm), or points (pt).
+
+Supported values:
+
+
+type PageMargin =
+  // Inches
+  | '0in'
+  | '0.25in'
+  | '0.4in'
+  | '0.5in'
+  | '0.75in'
+  | '1in'
+  | '1.25in'
+  | '1.5in'
+  | '1.75in'
+  | '2in'
+  // Centimeters
+  | '0cm'
+  | '0.5cm'
+  | '1cm'
+  | '1.5cm'
+  | '2cm'
+  | '2.5cm'
+  | '3cm'
+  | '4cm'
+  | '5cm'
+  // Millimeters
+  | '0mm'
+  | '5mm'
+  | '10mm'
+  | '15mm'
+  | '20mm'
+  | '25mm'
+  | '30mm'
+  | '40mm'
+  | '50mm'
+  // Points
+  | '0pt'
+  | '18pt'
+  | '36pt'
+  | '54pt'
+  | '72pt'
+  | '90pt'
+  | '108pt'
+  | '144pt';
+Example usage:
+
+
+import { ExportPdf } from 'reactjs-tiptap-editor/exportpdf';
+
+ExportPdf.configure({
+  paperSize: 'A4',
+  margins: {
+    top: '1in',
+    right: '0.4in',
+    bottom: '1in',
+    left: '0.4in',
+  },
+});import { ImportWord } from 'reactjs-tiptap-editor/importword'; 
+import { ExportWord } from 'reactjs-tiptap-editor/exportword'; 
+import { TableOfContents } from 'reactjs-tiptap-editor/tableofcontent'; 
+import { Excalidraw } from 'reactjs-tiptap-editor/excalidraw'; 
+import "@excalidraw/excalidraw/index.css"; 
+import { BubbleMenuExcalidraw } from 'reactjs-tiptap-editor/bubble-extra'; 
+
+const App = () => {
+
+  return  <RichTextEditor
+    bubbleMenu={{
+      render({ extensionsNames, editor, disabled }, bubbleDefaultDom) {
+        return <>
+          {bubbleDefaultDom}
+
+          {extensionsNames.includes('excalidraw')  ? <BubbleMenuExcalidraw disabled={disabled}
+            editor={editor}
+            key="excalidraw"
+          /> : null}
+        </>
+      },
+    }}
+  />
+}
+import { TextDirection } from 'reactjs-tiptap-editor/extension-bundle'; 
+import { TextDirection } from 'reactjs-tiptap-editor/textdirection'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+  TextDirection.configure({ 
+    types: ['heading', 'paragraph', 'blockquote', 'list_item'], 
+    directions: ['ltr', 'rtl'], 
+    defaultDirection: 'ltr', 
+  }) 
+import { Mention } from 'reactjs-tiptap-editor/mention'; 
+import { Attachment } from 'reactjs-tiptap-editor/attachment'; 
+import { ImageGif } from 'reactjs-tiptap-editor/imagegif'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+  ImageGif.configure({
+    API_KEY: '', 
+    provider: 'tenor' // (tenor or giphy)
+  }),
+];
+import { Mermaid } from 'reactjs-tiptap-editor/mermaid'; 
+import { Drawer } from 'reactjs-tiptap-editor/drawer'; 
+import 'easydrawer/styles.css'; 
+
+const extensions = [
+  ...,
+  // Import Extensions Here
+  Drawer.configure({
+    upload: (file: any) => {
+      // upload file to server return url
+    },
+  }),
+];
+Configuration bubble menu
+
+import { BubbleMenuDrawer } from 'reactjs-tiptap-editor/bubble-extra'; 
+
+const App = () => {
+
+  return  <RichTextEditor
+    bubbleMenu={{
+      render({ extensionsNames, editor, disabled }, bubbleDefaultDom) {
+        return <>
+          {bubbleDefaultDom}
+
+          {extensionsNames.includes('drawer')  ? <BubbleMenuDrawer disabled={disabled}
+            editor={editor}
+            key="drawer"
+          /> : null}
+        </>
+      },
+    }}
+  />
+}
+Source
+
+
+undo redo
+text size dropdown:{normal para minor heading major heading subheading}  
+Bold
+italic
+Strike through
+text color
+highlight
+link
+photo
+emoji
+para align{ledt align centre align right align justify}
+increase/decrease indent
+ordered list
+numbered list
+quote test
+line break
