@@ -77,7 +77,7 @@ export default function Settings() {
     if (!window.confirm("Delete this blog?")) return;
     try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+        await axios.delete(`API_URL/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         

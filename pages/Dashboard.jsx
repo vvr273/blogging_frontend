@@ -4,6 +4,8 @@ import BlogCard from "../components/BlogCard";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../src/api/auth";
 import "./Dashboard.css";
+const API_URL = import.meta.env.VITE_API_URL_blog;
+
 
 export default function Dashboard() {
   // State
@@ -46,9 +48,9 @@ export default function Dashboard() {
     const loadData = async () => {
       try {
         const [all, my, trending] = await Promise.all([
-          axios.get("http://localhost:5000/api/blogs/all"),
-          token ? axios.get("http://localhost:5000/api/blogs/my", { headers: { Authorization: `Bearer ${token}` } }) : Promise.resolve({ data: [] }),
-          axios.get("http://localhost:5000/api/blogs/trending")
+          axios.get(`${API_URL}/all`),
+          token ? axios.get(`${API_URL}/my`, { headers: { Authorization: `Bearer ${token}` } }) : Promise.resolve({ data: [] }),
+          axios.get(`${API_URL}/trending`)
         ]);
         setAllBlogs(all.data);
         setMyBlogs(my.data);
@@ -74,7 +76,7 @@ export default function Dashboard() {
     if (!token) return alert("Please login");
     if (!window.confirm("Delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const filterFunc = (b) => b._id !== id;

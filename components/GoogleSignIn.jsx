@@ -9,7 +9,7 @@ function GoogleSignIn() {
     const decoded = jwtDecode(credential);
     console.log("Google user:", decoded);
 
-    await axios.post("http://localhost:5000/api/auth/google-login", {
+    await axios.post("https://blogging-backend-gvgu.onrender.com/api/auth/google-login", {
       credential,
     });
   };

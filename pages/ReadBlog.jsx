@@ -13,6 +13,7 @@ import {
   Check
 } from "lucide-react";
 import "./ReadBlog.css";
+const API_URL = import.meta.env.VITE_API_URL_blog;
 
 // ---------------- UTILITIES ----------------
 const calculateReadTime = (text) => {
@@ -58,7 +59,7 @@ export default function ReadBlog() {
     const fetchBlog = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/blogs/${id}`,
+          `${API_URL}/${id}`,
           token ? { headers: { Authorization: `Bearer ${token}` } } : {}
         );
 
@@ -101,7 +102,7 @@ export default function ReadBlog() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/blogs/${id}/like`,
+        `${API_URL}/${id}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -117,7 +118,7 @@ export default function ReadBlog() {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/blogs/${id}/comment`,
+        `${API_URL}/${id}/comment`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -133,7 +134,7 @@ export default function ReadBlog() {
     if (!window.confirm("Delete this comment?")) return;
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/blogs/${id}/comment/${commentId}`,
+        `${API_URL}/${id}/comment/${commentId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setComments(res.data.comments);
@@ -158,7 +159,7 @@ export default function ReadBlog() {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/blogs/${id}/comment/${commentId}`,
+        `${API_URL}/${id}/comment/${commentId}`,
         { text: editText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -175,7 +176,7 @@ export default function ReadBlog() {
     if (!window.confirm("Are you sure you want to delete this story?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/dashboard");
