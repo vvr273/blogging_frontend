@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Editor from "../../components/Editor"; 
 import { createBlog } from "../../src/api/blogs";
 import image4 from "../images/image4.jpg"; 
-import "./NewPost.css";
+import "./Newpost.css";
 
 export default function NewPostPage() {
   const [title, setTitle] = useState("");
