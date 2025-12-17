@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa";
 
 // Import External CSS
-import "./Editor.css";
+import "./editor.css";
 
 // ============================================================
 // TOOLBAR BUTTON COMPONENT
