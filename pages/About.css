@@ -6,6 +6,7 @@
     margin: 0 auto;
     padding: 60px 20px;
     font-family: 'Poppins', sans-serif; /* Using Poppins for a clean, modern feel */
+    color: #1a202c;
 }
 
 span.nav-link:hover{
@@ -148,6 +149,45 @@ span.nav-link{
     line-height: 1.5;
 }
 
+/* --- Office Experience Section --- */
+.office-experience {
+    margin-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 28px;
+    align-items: center;
+    background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
+    border: 1px solid #dbeafe;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+.office-image-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 280px;
+}
+
+.office-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.office-content h2 {
+    margin: 0 0 14px;
+    font-size: 2rem;
+    color: #1e1b4b;
+}
+
+.office-content p {
+    margin: 0 0 12px;
+    color: #334155;
+    font-size: 1.03rem;
+    line-height: 1.7;
+}
+
 
 /* --- Mission Section --- */
 .about-mission {
@@ -179,6 +219,67 @@ span.nav-link{
     margin-top: 30px;
 }
 
+/* --- Dark Mode Support --- */
+body.dark .about-container {
+    color: #e2e8f0;
+}
+
+body.dark .hero-title {
+    color: #f8fafc;
+}
+
+body.dark .hero-subtitle {
+    color: #cbd5e1;
+}
+
+body.dark .themes-heading {
+    color: #f1f5f9;
+}
+
+body.dark .theme-card {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.35);
+}
+
+body.dark .theme-card h3 {
+    color: #f8fafc;
+}
+
+body.dark .theme-card p {
+    color: #cbd5e1;
+}
+
+body.dark .office-experience {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-color: #334155;
+}
+
+body.dark .office-content h2 {
+    color: #e0e7ff;
+}
+
+body.dark .office-content p {
+    color: #cbd5e1;
+}
+
+body.dark .about-mission {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+body.dark .about-mission h2 {
+    color: #c7d2fe;
+}
+
+body.dark .about-mission p {
+    color: #cbd5e1;
+}
+
+body.dark .cta-message {
+    color: #f8fafc;
+}
+
 
 /* --- Intersection Observer Reveal Styles --- */
 
@@ -203,5 +304,16 @@ span.nav-link{
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+    .office-experience {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+    .office-image-wrap {
+        min-height: 220px;
     }
 }
