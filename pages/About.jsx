@@ -3,6 +3,7 @@ import "./About.css";
 import travel from "../pages/images/travel.jpg";
 import interview from "../pages/images/interview.jpg";
 import college from "../pages/images/vit.png";
+import office from "../pages/images/office.jpg";
 // You will need to add images for the new themes (e.g., 'coding.jpg', 'aws.png')
 import coding from "../pages/images/coding.jpg"; // Placeholder for Coding/Debugging image
 import { useNavigate } from "react-router-dom";
@@ -94,11 +95,33 @@ export default function About() {
         </div>
       </section>
 
+      <section className="office-experience">
+        <div className="office-image-wrap">
+          <img src={office} alt="Office experience" />
+        </div>
+        <div className="office-content">
+          <h2>Office Experience 🏢</h2>
+          <p>
+            Real growth starts when ideas meet execution. My office journey taught
+            me how to collaborate in fast-paced teams, communicate clearly, and
+            deliver reliable solutions under real deadlines.
+          </p>
+          <p>
+            This space shares practical lessons from workplace projects, team
+            culture, ownership, and continuous improvement so you can grow with
+            confidence in your own career path.
+          </p>
+        </div>
+      </section>
+
       {/* 3. Mission & Philosophy - Cleaned up to be the closing thought */}
       <section className="about-mission reveal">
         <h2>Our Core Philosophy ✨</h2>
         <p>
-          To let people learn from **unfiltered real experiences**. This platform details the entire journey—from the failures and memories of college life to the logical steps required for **problem-solving, debugging, and achieving certification (like AWS)**. Continuous learning is our foundation.
+          To let people learn from unfiltered real experiences. This platform
+          details the entire journey, from college failures and life lessons to
+          practical steps for problem-solving, debugging, and professional growth.
+          Continuous learning is our foundation.
         </p>
         <p className="cta-message">
             Join the conversation and share your own growth story!
