@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { loginUser, registerUser, googleLoginUser } from "../src/api/auth";
 import { GoogleLogin } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ThreeDButton from "../components/ThreeDButton";
 
 export default function LoginSignup() {
@@ -10,6 +10,9 @@ export default function LoginSignup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // UX State
   const [message, setMessage] = useState("");
@@ -28,6 +31,9 @@ export default function LoginSignup() {
     setPassword("");
     setConfirmPassword("");
     setName("");
+    setShowLoginPassword(false);
+    setShowSignupPassword(false);
+    setShowConfirmPassword(false);
   };
 
   const validate = () => {
@@ -176,18 +182,28 @@ export default function LoginSignup() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
-              style={styles.input}
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div style={styles.passwordWrapper}>
+              <input
+                style={{ ...styles.input, ...styles.passwordInput }}
+                type={showLoginPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                style={styles.eyeButton}
+                onClick={() => setShowLoginPassword((prev) => !prev)}
+                aria-label={showLoginPassword ? "Hide password" : "Show password"}
+              >
+                {showLoginPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
             <div style={styles.passLink}>
-              <a href="/forgot-password" style={styles.link}>
+              <Link to="/forgot-password" style={styles.link}>
                 Forgot Password?
-              </a>
+              </Link>
             </div>
 
             {/* Primary Action Wrapper */}
@@ -225,22 +241,42 @@ export default function LoginSignup() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
-              style={styles.input}
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <input
-              style={styles.input}
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div style={styles.passwordWrapper}>
+              <input
+                style={{ ...styles.input, ...styles.passwordInput }}
+                type={showSignupPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                style={styles.eyeButton}
+                onClick={() => setShowSignupPassword((prev) => !prev)}
+                aria-label={showSignupPassword ? "Hide password" : "Show password"}
+              >
+                {showSignupPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+            <div style={styles.passwordWrapper}>
+              <input
+                style={{ ...styles.input, ...styles.passwordInput }}
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                style={styles.eyeButton}
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+              >
+                {showConfirmPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
 
              {/* Primary Action Wrapper */}
              <div style={styles.buttonWrapper}>
@@ -391,6 +427,25 @@ const styles = {
     background: "#F8FAFC",
     color: "#1E293B",
     transition: "all 0.2s ease",
+  },
+  passwordWrapper: {
+    position: "relative",
+    width: "100%",
+  },
+  passwordInput: {
+    paddingRight: "48px",
+  },
+  eyeButton: {
+    position: "absolute",
+    right: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    border: "none",
+    background: "transparent",
+    cursor: "pointer",
+    fontSize: "18px",
+    lineHeight: 1,
+    padding: 0,
   },
   passLink: {
     textAlign: "right",
