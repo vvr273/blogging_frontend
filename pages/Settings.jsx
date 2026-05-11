@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchProfile, updateProfile } from "../src/api/profile.js";
+import { fetchProfile, updateProfile, deleteOwnBlogFromProfile } from "../src/api/profile.js";
 import ThreeDButton from "../components/ThreeDButton";
 import BlogCard from "../components/BlogCard"; // Importing your existing card
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function Settings() {
   const [user, setUser] = useState(null);
@@ -77,9 +76,7 @@ export default function Settings() {
     if (!window.confirm("Delete this blog?")) return;
     try {
         const token = localStorage.getItem("token");
-        await axios.delete(`API_URL/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        await deleteOwnBlogFromProfile(id, token);
         
         // Optimistic UI Update
         const updatedPosts = user.posts.filter(b => b._id !== id);
