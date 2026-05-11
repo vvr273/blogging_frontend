@@ -44,6 +44,9 @@ export default function ReadBlog() {
 
   // Comment States
   const [comments, setComments] = useState([]);
+  const [commentsPage, setCommentsPage] = useState(1);
+  const [commentsLimit] = useState(10);
+  const [commentsTotalPages, setCommentsTotalPages] = useState(1);
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(true);
 
@@ -66,14 +69,19 @@ export default function ReadBlog() {
           token
             ? {
                 headers: { Authorization: `Bearer ${token}` },
+                params: { page: commentsPage, limit: commentsLimit },
                 signal: controller.signal,
               }
-            : { signal: controller.signal }
+            : { params: { page: commentsPage, limit: commentsLimit }, signal: controller.signal }
         );
 
         setBlog(res.data);
         setLikesCount(res.data.likes.length);
-        setComments(res.data.comments || []);
+        const incomingComments = res.data.comments || [];
+        setComments((prev) =>
+          commentsPage === 1 ? incomingComments : [...prev, ...incomingComments]
+        );
+        setCommentsTotalPages(res.data.commentsPagination?.totalPages || 1);
 
         if (currentUserId) {
           setIsLiked(
@@ -89,7 +97,7 @@ export default function ReadBlog() {
     };
     fetchBlog();
     return () => controller.abort();
-  }, [id, token, currentUserId]);
+  }, [id, token, currentUserId, commentsPage, commentsLimit]);
 
   // ---------------- AUTHOR CHECK (For Blog Post) ----------------
   const isAuthor =
@@ -131,7 +139,9 @@ export default function ReadBlog() {
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setComments(res.data.comments);
+      setComments(res.data.comments || []);
+      setCommentsPage(1);
+      setCommentsTotalPages(res.data.commentsPagination?.totalPages || 1);
       setCommentText("");
     } catch (err) {
       alert("Failed to post comment");
@@ -146,7 +156,9 @@ export default function ReadBlog() {
         `${API_URL}/${id}/comments/${commentId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setComments(res.data.comments);
+      setComments(res.data.comments || []);
+      setCommentsPage(1);
+      setCommentsTotalPages(res.data.commentsPagination?.totalPages || 1);
     } catch (err) {
       alert(err.response?.data?.message || "Could not delete comment");
     }
@@ -172,7 +184,9 @@ export default function ReadBlog() {
         { text: editText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setComments(res.data.comments);
+      setComments(res.data.comments || []);
+      setCommentsPage(1);
+      setCommentsTotalPages(res.data.commentsPagination?.totalPages || 1);
       setEditingCommentId(null);
       setEditText("");
     } catch (err) {
@@ -414,6 +428,16 @@ export default function ReadBlog() {
                 );
               })}
             </div>
+            {commentsPage < commentsTotalPages && (
+              <div className="input-actions" style={{ marginTop: "12px" }}>
+                <button
+                  className="post-btn"
+                  onClick={() => setCommentsPage((p) => p + 1)}
+                >
+                  Load more comments
+                </button>
+              </div>
+            )}
           </section>
         )}
       </article>
