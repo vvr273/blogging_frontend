@@ -53,40 +53,49 @@ export default function ReadBlog() {
 
   const token = localStorage.getItem("token");
   const currentUser = JSON.parse(localStorage.getItem("user") || "null");
+  const currentUserId = currentUser?._id || currentUser?.id || null;
 
   // ---------------- FETCH BLOG ----------------
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchBlog = async () => {
       try {
         const res = await axios.get(
           `${API_URL}/${id}`,
-          token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+          token
+            ? {
+                headers: { Authorization: `Bearer ${token}` },
+                signal: controller.signal,
+              }
+            : { signal: controller.signal }
         );
 
         setBlog(res.data);
         setLikesCount(res.data.likes.length);
         setComments(res.data.comments || []);
 
-        if (currentUser) {
+        if (currentUserId) {
           setIsLiked(
-            res.data.likes.includes(currentUser._id) ||
-              res.data.likes.includes(currentUser.id)
+            res.data.likes.includes(currentUserId)
           );
         }
-      } catch {
+      } catch (error) {
+        if (axios.isCancel(error)) return;
         console.error("Blog not found");
       } finally {
         setLoading(false);
       }
     };
     fetchBlog();
-  }, [id, token, currentUser]);
+    return () => controller.abort();
+  }, [id, token, currentUserId]);
 
   // ---------------- AUTHOR CHECK (For Blog Post) ----------------
   const isAuthor =
-    currentUser &&
+    currentUserId &&
     blog?.author &&
-    (blog.author._id === currentUser._id || blog.author._id === currentUser.id);
+    blog.author._id === currentUserId;
 
   // ---------------- LIKE ----------------
   const handleLike = async () => {
@@ -325,16 +334,14 @@ export default function ReadBlog() {
                 // LOGIC: Who can do what?
                 // 1. Is the current logged-in user the author of this comment?
                 const isCommentAuthor =
-                  currentUser &&
+                  currentUserId &&
                   commentUserId &&
-                  (commentUserId === currentUser._id ||
-                    commentUserId === currentUser.id);
+                  commentUserId === currentUserId;
 
                 // 2. Is the current logged-in user the author of the entire blog post?
                 const isBlogAuthor =
-                  currentUser &&
-                  (blog.author._id === currentUser._id ||
-                    blog.author._id === currentUser.id);
+                  currentUserId &&
+                  blog.author._id === currentUserId;
 
                 const isEditing = editingCommentId === c._id;
 
