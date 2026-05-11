@@ -17,14 +17,27 @@ const authConfig = () => {
 // -----------------------------------
 
 // Get all blogs (Public)
-export const fetchBlogs = async () => {
-  const res = await axios.get(`${API_URL}/all`);
+export const fetchBlogs = async ({ page = 1, limit = 12 } = {}) => {
+  const res = await axios.get(`${API_URL}/all`, {
+    params: { page, limit },
+  });
+  if (Array.isArray(res.data)) {
+    return {
+      items: res.data,
+      page: 1,
+      limit: res.data.length,
+      total: res.data.length,
+      totalPages: 1,
+    };
+  }
   return res.data;
 };
 
 // Get single blog (Public + Auth optional)
-export const fetchBlog = async (id) => {
-  const res = await axios.get(`${API_URL}/${id}`, authConfig());
+export const fetchBlog = async (id, { page = 1, limit = 20 } = {}) => {
+  const config = authConfig();
+  config.params = { page, limit };
+  const res = await axios.get(`${API_URL}/${id}`, config);
   return res.data;
 };
 
@@ -90,7 +103,7 @@ export const addComment = async (blogId, text) => {
 // };
 export const editComment = async (blogId, commentId, text) => {
   const res = await axios.put(
-    `${API_URL}/${blogId}/comment/${commentId}`, // Fixed path to match route
+    `${API_URL}/${blogId}/comments/${commentId}`,
     { text },
     authConfig()
   );
@@ -99,7 +112,7 @@ export const editComment = async (blogId, commentId, text) => {
 
 export const deleteComment = async (blogId, commentId) => {
   const res = await axios.delete(
-    `${API_URL}/${blogId}/comment/${commentId}`, // Fixed path to match route
+    `${API_URL}/${blogId}/comments/${commentId}`,
     authConfig()
   );
   return res.data;
