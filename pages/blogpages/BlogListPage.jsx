@@ -15,7 +15,7 @@ export default function BlogListPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {blogs.map((blog) => (
           <Link
-            to={`/blogs/${blog._id}`}
+            to={`/blog/${blog._id}`}
             key={blog._id}
             className="bg-white rounded-lg p-5 shadow-md hover:shadow-xl transition"
           >

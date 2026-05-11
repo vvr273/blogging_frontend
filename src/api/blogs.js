@@ -56,7 +56,7 @@ export const deleteBlog = async (id) => {
 // LIKE APIs
 // -----------------------------------
 export const toggleLike = async (id) => {
-  const res = await axios.post(`${API_URL}/${id}/like`, {}, authConfig());
+  const res = await axios.put(`${API_URL}/${id}/like`, {}, authConfig());
   return res.data;
 };
 
