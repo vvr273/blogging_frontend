@@ -118,7 +118,7 @@ export default function ReadBlog() {
 
     try {
       const res = await axios.post(
-        `${API_URL}/${id}/comment`,
+        `${API_URL}/${id}/comments`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -134,7 +134,7 @@ export default function ReadBlog() {
     if (!window.confirm("Delete this comment?")) return;
     try {
       const res = await axios.delete(
-        `${API_URL}/${id}/comment/${commentId}`,
+        `${API_URL}/${id}/comments/${commentId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setComments(res.data.comments);
@@ -159,7 +159,7 @@ export default function ReadBlog() {
 
     try {
       const res = await axios.put(
-        `${API_URL}/${id}/comment/${commentId}`,
+        `${API_URL}/${id}/comments/${commentId}`,
         { text: editText },
         { headers: { Authorization: `Bearer ${token}` } }
       );

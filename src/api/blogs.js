@@ -90,7 +90,7 @@ export const addComment = async (blogId, text) => {
 // };
 export const editComment = async (blogId, commentId, text) => {
   const res = await axios.put(
-    `${API_URL}/${blogId}/comment/${commentId}`, // Fixed path to match route
+    `${API_URL}/${blogId}/comments/${commentId}`,
     { text },
     authConfig()
   );
@@ -99,7 +99,7 @@ export const editComment = async (blogId, commentId, text) => {
 
 export const deleteComment = async (blogId, commentId) => {
   const res = await axios.delete(
-    `${API_URL}/${blogId}/comment/${commentId}`, // Fixed path to match route
+    `${API_URL}/${blogId}/comments/${commentId}`,
     authConfig()
   );
   return res.data;
