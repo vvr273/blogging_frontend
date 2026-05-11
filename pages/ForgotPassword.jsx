@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { forgotPassword } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 import { useNavigate } from "react-router-dom";
 import ThreeDButton from "../components/ThreeDButton"; // Assuming you have this from previous code
 
@@ -19,11 +20,11 @@ export default function ForgotPassword() {
     try {
       const res = await forgotPassword({ email });
       setStatus("success");
-      setMessage(res.data.message || "Reset link sent! Check your inbox.");
+      setMessage(res.message || "Reset link sent! Check your inbox.");
       setEmail(""); // Clear input on success
     } catch (err) {
       setStatus("error");
-      setMessage(err.response?.data?.message || "Something went wrong. Please try again.");
+      setMessage(toDisplayError(err));
     }
   };
 

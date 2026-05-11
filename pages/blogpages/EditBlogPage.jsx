@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchBlog, updateBlog } from "../../src/api/blogs";
+import { toDisplayError } from "../../src/api/client";
 import Editor from "../../components/Editor";
 import "./EditBlog.css"; // We will create this
 
@@ -17,7 +18,6 @@ export default function EditBlog() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
@@ -68,11 +68,11 @@ export default function EditBlog() {
     };
 
     try {
-      await updateBlog(id, updatedBlog, token);
+      await updateBlog(id, updatedBlog);
       // Optional: Add a toast notification here instead of alert
       navigate(`/blog/${id}`);
-    } catch (err) {
-      alert(err.response?.data?.message || "Update failed");
+      } catch (err) {
+      alert(toDisplayError(err));
     } finally {
       setSaving(false);
     }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser, googleLoginUser } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 import { GoogleLogin } from "@react-oauth/google";
 
 export default function Register() {
@@ -30,21 +31,21 @@ export default function Register() {
 
     try {
       const res = await registerUser({ name, email, password });
-      setMessage(res.data.message);
+      setMessage(res.message || "Signup successful. Please verify your email.");
       setTimeout(() => navigate("/login"), 2000); // navigate after 2s
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error occurred");
+      setMessage(toDisplayError(err));
     }
   };
 
   const handleGoogle = async (res) => {
     try {
-      const { data } = await googleLoginUser(res.credential);
+      const data = await googleLoginUser(res.credential);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/dashboard");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Google login failed");
+      setMessage(toDisplayError(err));
     }
   };
 

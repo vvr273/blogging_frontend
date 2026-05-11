@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { verifyEmail } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 
 const VerifyEmail = () => {
   const { token } = useParams();
@@ -11,10 +12,10 @@ const VerifyEmail = () => {
     const verify = async () => {
       try {
         const res = await verifyEmail(token);
-        setMessage(res.data.message);
+        setMessage(res.message || "Email verified successfully");
         setTimeout(() => navigate("/login"), 2000);
       } catch (err) {
-        setMessage(err.response?.data?.message || "Verification failed");
+        setMessage(toDisplayError(err));
       }
     };
     verify();

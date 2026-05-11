@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 
 export default function ResetPassword() {
   const { token } = useParams();
@@ -12,10 +13,10 @@ export default function ResetPassword() {
     e.preventDefault();
     try {
       const res = await resetPassword(token, { password });
-      setMessage(res.data.message);
+      setMessage(res.message || "Password reset successful");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error occurred");
+      setMessage(toDisplayError(err));
     }
   };
 
