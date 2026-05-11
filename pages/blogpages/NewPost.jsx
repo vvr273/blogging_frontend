@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Editor from "../../components/Editor"; 
 import { createBlog } from "../../src/api/blogs";
+import { toDisplayError } from "../../src/api/client";
 import image4 from "../images/image4.jpg"; 
 import "./Newpost.css";
 
@@ -14,8 +15,6 @@ export default function NewPostPage() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,13 +32,12 @@ export default function NewPostPage() {
           description,
           tags: tags.split(",").map((t) => t.trim()),
           category,
-        },
-        token
+        }
       );
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Error: " + (err.response?.data?.message || err.message));
+      alert(toDisplayError(err));
     } finally {
       setLoading(false);
     }

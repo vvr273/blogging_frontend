@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { loginUser, googleLoginUser } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 import { GoogleLogin } from "@react-oauth/google";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -27,22 +28,22 @@ export default function Login() {
     }
     try {
       const res = await loginUser({ email, password });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
       navigate("/dashboard");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error occurred");
+      setMessage(toDisplayError(err));
     }
   };
 
   const handleGoogle = async (res) => {
     try {
-      const { data } = await googleLoginUser(res.credential);
+      const data = await googleLoginUser(res.credential);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/dashboard");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Google login failed");
+      setMessage(toDisplayError(err));
     }
   };
 

@@ -19,6 +19,7 @@ import {
   fetchBlog,
   toggleLike,
 } from "../src/api/blogs";
+import { toDisplayError } from "../src/api/client";
 import "./ReadBlog.css";
 
 const calculateReadTime = (text) => {
@@ -82,9 +83,9 @@ export default function ReadBlog() {
         const data = await fetchBlog(id, { limit: 10 });
         if (!active) return;
         hydrateFromBlog(data, false);
-      } catch {
+      } catch (err) {
         if (!active) return;
-        setError("Failed to load blog. Please refresh and try again.");
+        setError(toDisplayError(err));
       } finally {
         if (active) setLoading(false);
       }
@@ -123,8 +124,8 @@ export default function ReadBlog() {
     try {
       const data = await fetchBlog(id, { limit: 10, cursor: nextCommentsCursor });
       hydrateFromBlog(data, true);
-    } catch {
-      alert("Could not load more comments");
+    } catch (err) {
+      alert(toDisplayError(err));
     } finally {
       setCommentsLoadingMore(false);
     }
@@ -136,8 +137,8 @@ export default function ReadBlog() {
       const data = await addComment(id, commentText);
       hydrateFromBlog(data, false);
       setCommentText("");
-    } catch {
-      alert("Failed to post comment");
+    } catch (err) {
+      alert(toDisplayError(err));
     }
   };
 
@@ -147,7 +148,7 @@ export default function ReadBlog() {
       const data = await deleteComment(id, commentId);
       hydrateFromBlog(data, false);
     } catch (err) {
-      alert(err.response?.data?.message || "Could not delete comment");
+      alert(toDisplayError(err));
     }
   };
 
@@ -170,7 +171,7 @@ export default function ReadBlog() {
       setEditingCommentId(null);
       setEditText("");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to edit comment");
+      alert(toDisplayError(err));
     }
   };
 
@@ -180,8 +181,8 @@ export default function ReadBlog() {
     try {
       await deleteBlog(id);
       navigate("/dashboard");
-    } catch {
-      alert("Failed to delete blog");
+    } catch (err) {
+      alert(toDisplayError(err));
     }
   };
 

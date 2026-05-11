@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchProfile, updateProfile, deleteOwnBlogFromProfile } from "../src/api/profile.js";
+import { toDisplayError } from "../src/api/client";
 import ThreeDButton from "../components/ThreeDButton";
 import BlogCard from "../components/BlogCard"; // Importing your existing card
 import { useNavigate } from "react-router-dom";
@@ -26,7 +27,7 @@ export default function Settings() {
         const token = localStorage.getItem("token");
         if (!token) return navigate("/login");
 
-        const data = await fetchProfile(token);
+        const data = await fetchProfile();
         // Ensure we handle the structure (some backends return {user: ...} some return direct obj)
         const profileData = data.profile || data || data.user; 
         
@@ -52,7 +53,7 @@ export default function Settings() {
     
     try {
       const token = localStorage.getItem("token");
-      const res = await updateProfile(formData, token);
+      const res = await updateProfile(formData);
 
       const updatedUser = res.user || res; 
       setUser(updatedUser);
@@ -67,7 +68,7 @@ export default function Settings() {
       }, 1500);
 
     } catch (err) {
-      setMessage({ text: "Failed to update. Try again.", type: "error" });
+      setMessage({ text: toDisplayError(err), type: "error" });
     }
   };
 
@@ -76,14 +77,14 @@ export default function Settings() {
     if (!window.confirm("Delete this blog?")) return;
     try {
         const token = localStorage.getItem("token");
-        await deleteOwnBlogFromProfile(id, token);
+        await deleteOwnBlogFromProfile(id);
         
         // Optimistic UI Update
         const updatedPosts = user.posts.filter(b => b._id !== id);
         setUser({ ...user, posts: updatedPosts });
         
     } catch (error) {
-        alert("Failed to delete");
+        alert(toDisplayError(error));
     }
   };
 

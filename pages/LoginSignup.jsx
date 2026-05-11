@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { loginUser, registerUser, googleLoginUser } from "../src/api/auth";
+import { toDisplayError } from "../src/api/client";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link, useNavigate } from "react-router-dom";
 import ThreeDButton from "../components/ThreeDButton";
@@ -62,8 +63,8 @@ export default function LoginSignup() {
       if (isLogin) {
         // --- LOGIN FLOW ---
         const res = await loginUser({ email, password });
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
         navigate("/dashboard");
       } else {
         // --- SIGNUP FLOW ---
@@ -83,7 +84,7 @@ export default function LoginSignup() {
       }
     } catch (err) {
       setMessageType("error");
-      setMessage(err.response?.data?.message || "Error occurred");
+      setMessage(toDisplayError(err));
     } finally {
       setIsLoading(false);
     }
@@ -92,13 +93,13 @@ export default function LoginSignup() {
   const handleGoogle = async (res) => {
     setIsLoading(true);
     try {
-      const { data } = await googleLoginUser(res.credential);
+      const data = await googleLoginUser(res.credential);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/dashboard");
     } catch (err) {
       setMessageType("error");
-      setMessage(err.response?.data?.message || "Google login failed");
+      setMessage(toDisplayError(err));
     } finally {
       setIsLoading(false);
     }
