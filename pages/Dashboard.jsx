@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import BlogCard from "../components/BlogCard";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,8 @@ export default function Dashboard() {
   const [page, setPage] = useState(1);
   const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const cacheRef = useRef(new Map());
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -45,30 +47,66 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
+    const normalize = (data) =>
+      Array.isArray(data) ? { items: data, totalPages: 1 } : data;
+
+    const fetchByTab = async (tab, targetPage, shouldSetState = true) => {
+      const cacheKey = `${tab}:${targetPage}:${limit}`;
+      if (cacheRef.current.has(cacheKey)) {
+        const cached = cacheRef.current.get(cacheKey);
+        if (shouldSetState) {
+          if (tab === "home") setAllBlogs(cached.items || []);
+          if (tab === "my") setMyBlogs(cached.items || []);
+          if (tab === "trending") setTrendingBlogs(cached.items || []);
+          setTotalPages(cached.totalPages || 1);
+        }
+        return cached;
+      }
+
+      let result = { items: [], totalPages: 1 };
+      if (tab === "home") {
+        const res = await axios.get(`${API_URL}/all`, { params: { page: targetPage, limit } });
+        result = normalize(res.data);
+      } else if (tab === "my") {
+        if (!token) {
+          result = { items: [], totalPages: 1 };
+        } else {
+          const res = await axios.get(`${API_URL}/my`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { page: targetPage, limit },
+          });
+          result = normalize(res.data);
+        }
+      } else {
+        const res = await axios.get(`${API_URL}/trending`);
+        result = { items: res.data || [], totalPages: 1 };
+      }
+
+      cacheRef.current.set(cacheKey, result);
+      if (shouldSetState) {
+        if (tab === "home") setAllBlogs(result.items || []);
+        if (tab === "my") setMyBlogs(result.items || []);
+        if (tab === "trending") setTrendingBlogs(result.items || []);
+        setTotalPages(result.totalPages || 1);
+      }
+      return result;
+    };
+
     const loadData = async () => {
+      setLoading(true);
       try {
-        const [all, my, trending] = await Promise.all([
-          axios.get(`${API_URL}/all`, { params: { page, limit } }),
-          token
-            ? axios.get(`${API_URL}/my`, {
-                headers: { Authorization: `Bearer ${token}` },
-                params: { page, limit },
-              })
-            : Promise.resolve({ data: { items: [], totalPages: 1 } }),
-          axios.get(`${API_URL}/trending`),
-        ]);
-        const allData = Array.isArray(all.data) ? { items: all.data, totalPages: 1 } : all.data;
-        const myData = Array.isArray(my.data) ? { items: my.data, totalPages: 1 } : my.data;
-        setAllBlogs(allData.items || []);
-        setMyBlogs(myData.items || []);
-        setTrendingBlogs(trending.data);
-        if (activeTab === "home") setTotalPages(allData.totalPages || 1);
-        if (activeTab === "my") setTotalPages(myData.totalPages || 1);
-        if (activeTab === "trending") setTotalPages(1);
+        const current = await fetchByTab(activeTab, page, true);
+        const nextPage = page + 1;
+        if (nextPage <= (current.totalPages || 1) && activeTab !== "trending") {
+          fetchByTab(activeTab, nextPage, false).catch(() => {});
+        }
       } catch (err) {
         console.error("Error fetching blogs", err);
+      } finally {
+        setLoading(false);
       }
     };
+
     loadData();
   }, [token, page, limit, activeTab]);
 
@@ -211,6 +249,7 @@ export default function Dashboard() {
 
         {/* Blog Grid */}
         <div className="blog-grid fade-in">
+          {loading && <p className="empty-msg">Loading...</p>}
           {filteredList.length > 0 ? (
             filteredList.map((blog) => (
               <BlogCard key={blog._id} blog={blog} onDelete={handleDelete} />
