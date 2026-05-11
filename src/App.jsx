@@ -22,6 +22,14 @@ import ReadBlog from "../pages/ReadBlog";
 import useAutoLogout from "./hooks/useAutoLogout";
 import { logoutUser } from "./api/auth";
 
+function PublicOnlyRoute({ children }) {
+  const token = localStorage.getItem("token");
+  if (token && token !== "undefined" && token !== "null") {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+}
+
 export default function App() {
   // Handle auto-logout on token expiry
   useAutoLogout(() => {
@@ -38,9 +46,30 @@ export default function App() {
       <Route path="/about" element={<About />} />
       
       {/* Auth Entry Points */}
-      <Route path="/" element={<LoginSignup />} />
-      <Route path="/login" element={<LoginSignup />} />
-      <Route path="/register" element={<LoginSignup />} />
+      <Route
+        path="/"
+        element={
+          <PublicOnlyRoute>
+            <LoginSignup />
+          </PublicOnlyRoute>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <PublicOnlyRoute>
+            <LoginSignup />
+          </PublicOnlyRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicOnlyRoute>
+            <LoginSignup />
+          </PublicOnlyRoute>
+        }
+      />
       
       {/* Account Recovery */}
       <Route path="/verify/:token" element={<VerifyEmail />} />
