@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // Auth Components
 import LoginSignup from "../pages/LoginSignup";
 import VerifyEmail from "../pages/VerifyEmail";
+import VerifyOtp from "../pages/VerifyOtp";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 
@@ -73,6 +74,7 @@ export default function App() {
       
       {/* Account Recovery */}
       <Route path="/verify/:token" element={<VerifyEmail />} />
+      <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
 
