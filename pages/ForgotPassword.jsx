@@ -20,7 +20,8 @@ export default function ForgotPassword() {
     try {
       const res = await forgotPassword({ email });
       setStatus("success");
-      setMessage(res.message || "Reset link sent! Check your inbox.");
+      setMessage(res.message || "Reset OTP sent! Check your inbox.");
+      setTimeout(() => navigate("/reset-password", { state: { email } }), 800);
       setEmail(""); // Clear input on success
     } catch (err) {
       setStatus("error");

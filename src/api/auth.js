@@ -24,8 +24,10 @@ export const verifyEmail = (token) => API.get(`/verify/${token}`).then((res) => 
 export const verifyOtp = (data) => API.post("/verify-otp", data).then((res) => res.data);
 export const resendOtp = (data) => API.post("/resend-otp", data).then((res) => res.data);
 export const forgotPassword = (data) => API.post("/forgot-password", data).then((res) => res.data);
-export const resetPassword = (token, data) =>
-  API.post(`/reset-password/${token}`, data).then((res) => res.data);
+export const resendResetOtp = (data) =>
+  API.post("/forgot-password/resend-otp", data).then((res) => res.data);
+export const resetPasswordWithOtp = (data) =>
+  API.post("/reset-password-otp", data).then((res) => res.data);
 
 // ------------------------
 // Dashboard APIs
