@@ -69,22 +69,16 @@ export default function LoginSignup() {
       } else {
         // --- SIGNUP FLOW ---
         await registerUser({ name, email, password });
-        
-        // 1. Show Success Message
-        setMessageType("success");
-        setMessage("Signup successful! ✉️ Please check your email to verify your account before logging in.");
-        
-        // 2. Automatically switch to Login view so they can login after verifying
-        setIsLogin(true);
-        
-        // 3. Clear sensitive fields but keep email for convenience
-        setPassword("");
-        setConfirmPassword("");
-        setName("");
+        navigate("/verify-otp", { state: { email } });
       }
     } catch (err) {
+      const parsed = toDisplayError(err);
+      if (isLogin && /verify your email with otp first/i.test(parsed)) {
+        navigate("/verify-otp", { state: { email } });
+        return;
+      }
       setMessageType("error");
-      setMessage(toDisplayError(err));
+      setMessage(parsed);
     } finally {
       setIsLoading(false);
     }
